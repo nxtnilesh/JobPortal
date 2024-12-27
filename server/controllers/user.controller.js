@@ -1,7 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-export const create = async (req, res) => {
+
+export const register = async (req, res) => {
   try {
     const { fullname, email, password, phoneNumber, role } = req.body;
     if (!fullname || !email || !password || !phoneNumber || !role) {
@@ -54,7 +55,7 @@ export const login = async (req, res) => {
         .status(400)
         .json({ message: "Invalid credentials role", success: false });
     }
-    const token = jwt.sign({ user: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     return res
@@ -65,7 +66,7 @@ export const login = async (req, res) => {
         sameSite: "strict",
       })
       .json({ message: `Welcome Back ${user.fullname}`, user, success: true });
-      // return only required user data if needed
+    // return only required user data if needed
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -80,30 +81,32 @@ export const logout = async (req, res) => {
   }
 };
 
-export const updataProfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
-    if (!fullname || !email || !phoneNumber || !bio || !skills) {
-      return res
-        .status(400)
-        .json({ message: "All fields are required", success: false });
-    }
     // cloundinary
-
-    const skillsArray = skills.split(",");
+    let skillsArray;
+    if (skills) {
+      skillsArray = skills.split(",");
+    }
+    
     const userId = req.id;
+    console.log(userId);
     let user = await User.findById(userId);
     if (!user) {
       return res
         .status(400)
         .json({ message: "User not found", success: false });
     }
-    user.fullname = fullname;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-    user.profile.bio = bio;
-    user.skills = skillsArray;
+    if (fullname) user.fullname = fullname;
+
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    if (bio) user.profile.bio = bio;
+
+    if (skills) user.skills = skillsArray;
 
     await user.save();
     return res
