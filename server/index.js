@@ -20,8 +20,9 @@ app.use(cors(corsOptions));
 
 // routes
 import userRoute from "./routes/user.route.js";
+import companyRoute from "./routes/company.route.js";
 app.use("/api/v1/user", userRoute);
-
+app.use("/api/v1/company", companyRoute);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

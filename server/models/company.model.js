@@ -2,21 +2,21 @@ import mongoose from "mongoose";
 const companySchema = new mongoose.Schema(
   {
     name: {
-      typeof: String,
+      type: String,
       required: true,
     },
     description: {
-      typeof: String,
-      required: true,
+      type: String,
+      // required: true,
     },
     website: {
-      typeof: String,
+      type: String,
     },
     location: {
-      typeof: String,
+      type: String,
     },
     logo: {
-      typeof: String,
+      type: String,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -26,4 +26,4 @@ const companySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-const Company = mongoose.model("Company", companySchema);
+export const Company = mongoose.model("Company", companySchema);
