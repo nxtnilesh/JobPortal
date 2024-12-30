@@ -28,10 +28,10 @@ const userSchema = new mongoose.Schema(
       default: "student",
     },
     profile: {
-      bio: { typeof: String },
-      skills: [{ typeof: String }],
-      resume: { typeof: String }, //url of file
-      resumeOriginalName: { typeof: String },
+      bio: { type: String },
+      skills: [{ type: String }],
+      resume: { type: String }, //url of file
+      resumeOriginalName: { type: String },
       company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
       profilePhoto: {
         type: String,
